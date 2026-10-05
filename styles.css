@@ -1,0 +1,404 @@
+/* REEL-7 — Teenage Engineering design language.
+ * cream paper, near-black ink, signature orange. No gradients except a
+ * whisper of paper texture. Tight uppercase micro-labels, big whitespace. */
+:root {
+  --cream: #f4f1e8;
+  --cream-deep: #ece7d8;
+  --ink: #1a1a1a;
+  --ink-soft: #55524a;
+  --orange: #ff4d00;
+  --orange-deep: #d63e00;
+  --line: #ddd6c2;
+  --card: #faf8f1;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--cream);
+  background-image: radial-gradient(rgba(26,26,26,0.025) 1px, transparent 1px);
+  background-size: 5px 5px;
+  color: var(--ink);
+  font-family: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ---------- device card ---------- */
+.device {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px 24px 24px;
+  text-align: center;
+  box-shadow: 0 2px 0 rgba(26,26,26,0.04), 0 18px 40px -28px rgba(26,26,26,0.25);
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 30px;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  font-weight: 700;
+}
+.brand .dash { color: var(--orange); }
+.tagline {
+  margin: 6px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---------- reel ---------- */
+.reel-wrap {
+  position: relative;
+  width: 196px;
+  height: 196px;
+  margin: 22px auto 8px;
+}
+#reel { width: 100%; height: 100%; display: block; }
+.reel-ring { fill: none; stroke: var(--ink); stroke-width: 5; }
+.reel-face { fill: var(--cream); stroke: var(--line); stroke-width: 1.5; }
+.spoke { fill: var(--ink); }
+.reel-hub { fill: var(--orange); }
+.hub-mark { fill: var(--cream); }
+.reel-pin { fill: var(--ink); }
+
+#reelRotor {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#reel.spin-fast #reelRotor { animation: spin 0.9s linear infinite; }
+#reel.spin-med #reelRotor { animation: spin 2.4s linear infinite; }
+#reel.wobble #reelRotor { animation: wobble 0.7s ease-out 1; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes wobble {
+  0% { transform: rotate(0deg); }
+  30% { transform: rotate(24deg); }
+  60% { transform: rotate(-10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.rec-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink { to { visibility: hidden; } }
+
+/* ---------- timecode ---------- */
+.timecode {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 40px;
+  letter-spacing: 0.08em;
+  margin: 6px 0 2px;
+  font-variant-numeric: tabular-nums;
+}
+.device.recording .timecode { color: var(--orange-deep); }
+
+/* ---------- VU ---------- */
+.vu-block { margin: 10px 4px 0; text-align: left; }
+.micro-toggle {
+  float: right;
+  border: 0;
+  background: transparent;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 2px 0;
+}
+.micro-toggle:hover { color: var(--orange-deep); }
+.micro-label {
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.vu {
+  position: relative;
+  height: 14px;
+  margin-top: 6px;
+  background: var(--cream-deep);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  overflow: hidden;
+}
+.vu-ticks {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0 9px, rgba(26,26,26,0.12) 9px 10px);
+}
+.vu-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0%;
+  background: var(--ink);
+  transition: width 60ms linear;
+}
+.vu-fill.hot { background: var(--orange); }
+.vu-peak {
+  position: absolute; top: 0; bottom: 0;
+  width: 2px; left: 0%;
+  background: var(--orange-deep);
+}
+
+/* ---------- source + transport ---------- */
+.source-state {
+  margin: 12px 0 2px;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.source-state.armed { color: var(--ink); }
+.source-state.live { color: var(--orange-deep); }
+
+.transport {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin: 14px 0 4px;
+}
+.tbtn {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
+}
+.tbtn span {
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.tbtn:active:not(:disabled) { transform: scale(0.93); }
+.tbtn:disabled { opacity: 0.32; cursor: default; }
+.tbtn.rec {
+  border-color: var(--orange);
+  color: var(--orange-deep);
+}
+.tbtn.rec.armed {
+  background: var(--orange);
+  border-color: var(--orange-deep);
+  color: #fff;
+  box-shadow: 0 0 22px rgba(255, 77, 0, 0.45);
+}
+
+.source-toggle {
+  display: inline-flex;
+  margin-top: 14px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.seg {
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 9px 22px;
+  cursor: pointer;
+}
+.seg.active { background: var(--ink); color: var(--cream); }
+.source-note {
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  margin: 8px 0 0;
+}
+
+/* ---------- toast ---------- */
+.toast {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--orange);
+  border-radius: 10px;
+  background: #fff8f2;
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+/* ---------- memos ---------- */
+.memos {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px 18px 14px;
+}
+.memos-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.memos-head h2 {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.memo-list { list-style: none; margin: 0; padding: 0; }
+.memo {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 4px;
+  border-top: 1px solid var(--line);
+}
+.memo:first-child { border-top: 0; }
+.memo.selected { background: #fffdf6; }
+.memo .mplay {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--ink);
+}
+.memo.playing .mplay { background: var(--ink); color: var(--cream); }
+.memo .mname {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: text;
+}
+.memo .mname input {
+  font: inherit;
+  width: 100%;
+  border: 1px solid var(--orange);
+  border-radius: 6px;
+  padding: 2px 6px;
+  background: #fff;
+}
+.memo .mmeta {
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+.memo .macts { display: flex; gap: 6px; }
+.memo .macts button {
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 5px 8px;
+  cursor: pointer;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+.memo .macts button:hover { border-color: var(--ink); color: var(--ink); }
+.memo .macts .del:hover { border-color: var(--orange-deep); color: var(--orange-deep); }
+
+.empty {
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-align: center;
+  padding: 18px 0 8px;
+  font-style: italic;
+}
+.storage {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ---------- onboarding ---------- */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(26, 26, 26, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 50;
+}
+.overlay[hidden] { display: none; }
+.overlay .card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 26px 24px;
+  max-width: 360px;
+  box-shadow: 0 24px 60px -20px rgba(0,0,0,0.4);
+}
+.overlay .card h2 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.overlay .card ol {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.9;
+}
+.overlay .fine { font-size: 11px; color: var(--ink-soft); }
+.ok-btn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--orange);
+  color: #fff;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  #reel.spin-fast #reelRotor,
+  #reel.spin-med #reelRotor,
+  #reel.wobble #reelRotor { animation: none; }
+  .rec-dot { animation: none; }
+  .tbtn, .vu-fill { transition: none; }
+}
+
+@media (max-width: 420px) {
+  .stage { padding: 20px 14px 48px; }
+  .timecode { font-size: 34px; }
+  .tbtn { width: 68px; height: 68px; }
+}
